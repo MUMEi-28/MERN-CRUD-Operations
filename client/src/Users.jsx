@@ -39,6 +39,7 @@ export default function Users()
                                         <td>{user.Email}</td>
                                         <td>{user.Age}</td>
                                         <td>
+                                            <Link to='/update' className="btn btn-success">Update</Link>
                                             <button>Edit</button> <button>Delete</button>
                                         </td>
                                     </tr>
