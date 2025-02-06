@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom'
 
 import axios from 'axios'
 
@@ -9,13 +10,15 @@ export default function CreateUser()
     const [email, setEmail] = React.useState()
     const [age, setAge] = React.useState()
 
-    const Submit = (event) =>
+    const navigate = useNavigate()
+
+    useEffect(() =>
     {
-        event.preventDefault()
-        axios.post("http://localhost:3001/createUser", { name, email, age })
-            .then(result => console.log(result))
+        axios.get('http://localhost:3001')
+            .then(result => setUsers(result.data))
             .catch(err => console.log(err))
-    }
+    }, [])
+
 
     return (
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
