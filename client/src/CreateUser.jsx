@@ -11,14 +11,16 @@ export default function CreateUser()
     const [age, setAge] = React.useState()
 
     const navigate = useNavigate()
-
-    useEffect(() =>
+    const Submit = (event) =>
     {
-        axios.get('http://localhost:3001')
-            .then(result => setUsers(result.data))
+        event.preventDefault()
+        axios.post("http://localhost:3001/createUser", { name, email, age })
+            .then(result => console.log(result))
             .catch(err => console.log(err))
-    }, [])
 
+        navigate('/')
+
+    }
 
     return (
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">

@@ -25,24 +25,49 @@ app.get('/getUser/:id', (req, res) =>
         .catch(err => res.json())
 })
 
-app.purge('/updateUser/:id', (req, res) =>
+app.put('/updateUser/:id', async (req, res) =>
+{
+    try
+    {
+        const id = req.params.id;
+        const updatedUser = await UserModel.findByIdAndUpdate(id, req.body, { new: true });
+
+        if (!updatedUser)
+        {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json(updatedUser);
+    } catch (err)
+    {
+        res.status(500).json({ error: "Error updating user" });
+    }
+});
+
+
+app.delete('/deleteUser/:id', (req, res) =>
 {
     const id = req.params.id;
-    UserModel.findByIdAndUpdate({ _id: id }, {
-        name: req.body.name,
-        email: req.body.email,
-        age: req.body.age
-    })
-        .then(users => res.json(users))
-        .catch(err => res.json(err))
-})
+    UserModel.findByIdAndDelete(id)
+        .then(deletedUser => 
+        {
+            if (!deletedUser)
+            {
+                return res.status(404).json({ error: "User not found" });
+            }
+            res.json({ message: "User deleted successfully", deletedUser });
+        })
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
 
 app.post("/createUser", (req, res) =>
 {
     UserModel.create(req.body)
-        .then(users => res.json(users))
-        .catch(err => res.json(err))
-})
+        .then(user => res.json({ message: "User created successfully", user }))
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
 
 app.listen(3001, function ()
 {
